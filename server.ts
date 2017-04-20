@@ -2,6 +2,8 @@ import * as express     from 'express';
 import * as path        from 'path';
 import * as bodyparser  from 'body-parser';
 
+import { default as serviceRouter } from './services.router';
+
 // Configure params
 const baseFolder = path.resolve(__dirname + '/../../dist/client');
 
@@ -16,6 +18,7 @@ app.use(bodyparser.urlencoded({             // Parse URL encoded requests
 }));
 
 // Mount sub-routers
+app.use('/', serviceRouter);
 app.use(express.static(baseFolder));        // Serve static files
 
 // Run the server
