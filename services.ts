@@ -46,6 +46,11 @@ export function logout(): Bluebird<any> {
   }));
 }
 
+/**
+ * Gathers informations about the currently logged-in user.
+ * @param options Request's options.
+ * @returns {Bluebird<any>}
+ */
 export function getCurrentUser(options?: any): Bluebird<any> {
   let headers: any = options ? options.headers : undefined;
   return Bluebird.resolve(request({
