@@ -1,5 +1,4 @@
 import * as express   from 'express';
-import * as Bluebird  from 'bluebird';
 import * as services  from './services';
 
 export let router = express.Router();
@@ -66,6 +65,70 @@ router.post('/logout', (req: express.Request, res: express.Response) => {
       return res.header('Set-Cookie', resp.headers['set-cookie'][0]).status(200).json({
         authenticated: true
       });
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * GET /user/:userId/books
+ *
+ * Returns all information known about the books
+ * originally owned by the given user, alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/:userId/books', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserLibrary(req.params['userId'])
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+
+/**
+ * GET /user/:userId/books/reading
+ *
+ * Returns all information known about the books
+ * currently read by the given user, alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/:userId/books/reading', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserReadingBooks(req.params['userId'])
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * GET /user/:userId/books/borrowed
+ *
+ * Returns all information known about the books
+ * currently borrowed by the given user, alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/:userId/books/borrowed', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserBorrowedBooks(req.params['userId'])
+    .then((resp: any) => {
+      return res.status(200).json(resp);
     })
     .catch((err: Error) => {
       console.log(err);
