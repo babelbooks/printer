@@ -18,7 +18,7 @@ app.use(bodyparser.urlencoded({             // Parse URL encoded requests
 }));
 
 // Mount sub-routers
-app.use('/', serviceRouter);
+app.use('/api', serviceRouter);             // Use services API
 app.use(express.static(baseFolder));        // Serve static files
 
 // Run the server
