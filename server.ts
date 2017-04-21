@@ -1,6 +1,7 @@
 import * as express     from 'express';
 import * as path        from 'path';
 import * as bodyparser  from 'body-parser';
+import * as morgan      from 'morgan';
 
 import { router as serviceRouter }  from './services.router';
 
@@ -16,6 +17,7 @@ app.use(bodyparser.json());                 // Parse requests' bodies as json
 app.use(bodyparser.urlencoded({             // Parse URL encoded requests
   extended: true
 }));
+app.use(morgan('dev'));                     // Use logger
 
 // Mount sub-routers
 app.use('/api', serviceRouter);             // Use services API
