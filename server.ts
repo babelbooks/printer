@@ -2,7 +2,7 @@ import * as express     from 'express';
 import * as path        from 'path';
 import * as bodyparser  from 'body-parser';
 
-import { default as serviceRouter } from './services.router';
+import { router as serviceRouter }  from './services.router';
 
 // Configure params
 const baseFolder = path.resolve(__dirname + '/../../dist/client');
