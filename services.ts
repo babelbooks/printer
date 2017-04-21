@@ -46,6 +46,14 @@ export function logout(): Bluebird<any> {
   }));
 }
 
+export function getCurrentUser(): Bluebird<any> {
+  return Bluebird.resolve(request({
+    method: 'GET',
+    url: 'http://localhost:3000/user/me',
+    json: true
+  }));
+}
+
 /**
  * Gathers all information about the books originally owned
  * by the given user.

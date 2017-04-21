@@ -93,6 +93,26 @@ router.get('/user/:userId/books', (req: express.Request, res: express.Response) 
     });
 });
 
+/**
+ * GET /user/me
+ *
+ * Retrieves information about the current user,
+ * and returns it alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/me', (req: express.Request, res: express.Response) => {
+  return services
+    .getCurrentUser()
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
 
 /**
  * GET /user/:userId/books/reading
