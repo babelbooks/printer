@@ -46,11 +46,13 @@ export function logout(): Bluebird<any> {
   }));
 }
 
-export function getCurrentUser(): Bluebird<any> {
+export function getCurrentUser(options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
   return Bluebird.resolve(request({
     method: 'GET',
     url: 'http://localhost:3000/user/me',
-    json: true
+    json: true,
+    headers: headers
   }));
 }
 
@@ -58,43 +60,49 @@ export function getCurrentUser(): Bluebird<any> {
  * Gathers all information about the books originally owned
  * by the given user.
  * @param userId The user's Id from which retrieve the books.
- * @returns {Bluebird<any>}
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
  */
-export function getUserLibrary(userId: number | string): Bluebird<any> {
-  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books');
+export function getUserLibrary(userId: number | string, options?: any): Bluebird<any[]> {
+  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books', options);
 }
 
 /**
  * Gathers all information about the books currently borrowed
  * by the given user.
  * @param userId The user's Id from which retrieve the books.
- * @returns {Bluebird<any>}
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
  */
-export function getUserBorrowedBooks(userId: number | string): Bluebird<any> {
-  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books/borrowed');
+export function getUserBorrowedBooks(userId: number | string, options?: any): Bluebird<any[]> {
+  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books/borrowed', options);
 }
 
 /**
  * Gathers all information about the books currently read
  * by the given user.
  * @param userId The user's Id from which retrieve the books.
- * @returns {Bluebird<any>}
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
  */
-export function getUserReadingBooks(userId: number | string): Bluebird<any> {
-  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books/reading');
+export function getUserReadingBooks(userId: number | string, options?: any): Bluebird<any[]> {
+  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books/reading', options);
 }
 
 /**
  * A wrapper to factorize some code.
  * @param from The url from which gather the books.
- * @returns {Bluebird<(any|any|any|any|any)[]>}
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
  */
-function getUserBooks(from: string): Bluebird<any> {
+function getUserBooks(from: string, options?: any): Bluebird<any[]> {
+  let headers: any = options ? options.headers : undefined;
   return Bluebird
     .resolve(request({
       method: 'GET',
       url: from,
-      json: true
+      json: true,
+      headers: headers
     }))
     .then((res: any[]) => {
       let promises: any[] = [];

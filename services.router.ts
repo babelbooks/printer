@@ -73,27 +73,6 @@ router.post('/logout', (req: express.Request, res: express.Response) => {
 });
 
 /**
- * GET /user/:userId/books
- *
- * Returns all information known about the books
- * originally owned by the given user, alongside a 200 status code
- * if successful.
- * Otherwise, returns a 400 status code along with a object
- * describing the error.
- */
-router.get('/user/:userId/books', (req: express.Request, res: express.Response) => {
-  return services
-    .getUserLibrary(req.params['userId'])
-    .then((resp: any) => {
-      return res.status(200).json(resp);
-    })
-    .catch((err: Error) => {
-      console.log(err);
-      return res.status(400).json(err);
-    });
-});
-
-/**
  * GET /user/me
  *
  * Retrieves information about the current user,
@@ -104,7 +83,33 @@ router.get('/user/:userId/books', (req: express.Request, res: express.Response) 
  */
 router.get('/user/me', (req: express.Request, res: express.Response) => {
   return services
-    .getCurrentUser()
+    .getCurrentUser({headers: {
+      cookie: req.headers['cookie']}
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * GET /user/:userId/books
+ *
+ * Returns all information known about the books
+ * originally owned by the given user, alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/:userId/books', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserLibrary(req.params['userId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
     .then((resp: any) => {
       return res.status(200).json(resp);
     })
@@ -125,7 +130,11 @@ router.get('/user/me', (req: express.Request, res: express.Response) => {
  */
 router.get('/user/:userId/books/reading', (req: express.Request, res: express.Response) => {
   return services
-    .getUserReadingBooks(req.params['userId'])
+    .getUserReadingBooks(req.params['userId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
     .then((resp: any) => {
       return res.status(200).json(resp);
     })
@@ -146,7 +155,11 @@ router.get('/user/:userId/books/reading', (req: express.Request, res: express.Re
  */
 router.get('/user/:userId/books/borrowed', (req: express.Request, res: express.Response) => {
   return services
-    .getUserBorrowedBooks(req.params['userId'])
+    .getUserBorrowedBooks(req.params['userId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
     .then((resp: any) => {
       return res.status(200).json(resp);
     })
