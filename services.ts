@@ -104,12 +104,12 @@ function getUserBooks(from: string, options?: any): Bluebird<any[]> {
       json: true,
       headers: headers
     }))
-    .then((res: any[]) => {
+    .then((res: any) => {
       let promises: any[] = [];
-      for(let book of res) {
+      for(let book of res.books) {
         promises.push(request({
           method: 'GET',
-          url: 'http://localhost:3002/book/' + book.books.isbn,
+          url: 'http://localhost:3002/book/' + book.isbn,
           json: true
         }))
       }
