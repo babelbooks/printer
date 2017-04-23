@@ -47,7 +47,7 @@ export function logout(): Bluebird<any> {
 }
 
 /**
- * Gathers informations about the currently logged-in user.
+ * Gathers information about the currently logged-in user.
  * @param options Request's options.
  * @returns {Bluebird<any>}
  */
