@@ -1,27 +1,11 @@
 import * as express     from 'express';
-import * as path        from 'path';
-import * as bodyparser  from 'body-parser';
-import * as morgan      from 'morgan';
-
-import { router as serviceRouter }  from './services.router';
-
-// Configure params
-const baseFolder = path.resolve(__dirname + '/../../dist/client');
+import { configureApp } from './server.config';
 
 // Create server app
 const app : any = express();
 
 // Configure server app
-app.set('port', process.env.PORT || 3001);  // Process port
-app.use(bodyparser.json());                 // Parse requests' bodies as json
-app.use(bodyparser.urlencoded({             // Parse URL encoded requests
-  extended: true
-}));
-app.use(morgan('dev'));                     // Use logger
-
-// Mount sub-routers
-app.use('/api', serviceRouter);             // Use services API
-app.use(express.static(baseFolder));        // Serve static files
+configureApp(app);
 
 // Run the server
 app.listen(app.get('port'), '0.0.0.0', () => {
