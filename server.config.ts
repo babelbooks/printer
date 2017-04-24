@@ -25,5 +25,17 @@ export function configureApp(app: express.Application): void {
 
   // Mount sub-routers
   app.use('/api', service.router);      // Use services API
-  app.use(express.static(baseFolder));  // Serve static files
+
+  // Serve needed files
+  if(process.env.NODE_ENV !== 'hot-dev') {
+    // Not in hot dev: we must serve everything
+    app.use(express.static(baseFolder));
+  } else {
+    // In hot dev with HMR
+    // We must only serve libs that are not bundled
+    app.get('/assets/*.min.(js|css)', (req: express.Request, res: express.Response) => {
+      res.sendFile(path.resolve(baseFolder + req.originalUrl));
+    });
+  }
+
 }
