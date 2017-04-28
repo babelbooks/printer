@@ -1,0 +1,15 @@
+# Node related
+node_modules/
+npm-debug.log
+
+# Dist folder
+dist/
+
+# Cover folder
+cover/
+
+# Other
+sql/
+.git/
+.idea/
+sketchs/
