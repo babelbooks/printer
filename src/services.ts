@@ -1,6 +1,9 @@
 import * as Bluebird  from 'bluebird';
 import * as request   from 'request-promise';
 
+const engineURL: string = 'http://' + (process.env.BB_ENGINE_HOST || 'localhost') + ':' + (process.env.BB_ENGINE_PORT || 3002);
+const babelURL: string  = 'http://' + (process.env.BB_BABEL_HOST || 'localhost') + ':' + (process.env.BB_BABEL_PORT || 3000);
+
 /**
  * Tests the status of the services that this router will use.
  */
@@ -8,11 +11,11 @@ export function test(): Bluebird<any> {
   return Bluebird.all([
     request({
       method: 'GET',
-      url: 'http://localhost:3000/test'})
+      url: babelURL + '/test'})
       .catch((err: Error) => err),
     request({
       method: 'GET',
-      url: 'http://localhost:3002/test'})
+      url: engineURL + '/test'})
       .catch((err: Error) => err)
   ]);
 }
@@ -26,7 +29,7 @@ export function test(): Bluebird<any> {
 export function login(user: any): Bluebird<any> {
   return Bluebird.resolve(request({
     method: 'POST',
-    url: 'http://localhost:3000/auth/login',
+    url: babelURL + '/auth/login',
     json: true,
     body: user,
     resolveWithFullResponse: true
@@ -40,9 +43,23 @@ export function login(user: any): Bluebird<any> {
 export function logout(): Bluebird<any> {
   return Bluebird.resolve(request({
     method: 'POST',
-    url: 'http://localhost:3000/auth/logout',
+    url: babelURL + '/auth/logout',
     json: true,
     resolveWithFullResponse: true
+  }));
+}
+
+/**
+ * Tries to register the given user.
+ * @param user The user to register.
+ * @returns {Bluebird<any>}
+ */
+export function signup(user: any): Bluebird<any> {
+  return Bluebird.resolve(request({
+    method: 'PUT',
+    url: babelURL + '/user/add',
+    json: true,
+    body: user
   }));
 }
 
@@ -55,7 +72,7 @@ export function getCurrentUser(options?: any): Bluebird<any> {
   let headers: any = options ? options.headers : undefined;
   return Bluebird.resolve(request({
     method: 'GET',
-    url: 'http://localhost:3000/user/me',
+    url: babelURL + '/user/me',
     json: true,
     headers: headers
   }));
@@ -69,7 +86,7 @@ export function getCurrentUser(options?: any): Bluebird<any> {
  * @returns {Bluebird<any[]>}
  */
 export function getUserLibrary(userId: number | string, options?: any): Bluebird<any[]> {
-  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books', options);
+  return getUserBooks(babelURL + '/user/' + userId + '/books', options);
 }
 
 /**
@@ -80,7 +97,7 @@ export function getUserLibrary(userId: number | string, options?: any): Bluebird
  * @returns {Bluebird<any[]>}
  */
 export function getUserBorrowedBooks(userId: number | string, options?: any): Bluebird<any[]> {
-  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books/borrowed', options);
+  return getUserBooks(babelURL + '/user/' + userId + '/books/borrowed', options);
 }
 
 /**
@@ -91,7 +108,7 @@ export function getUserBorrowedBooks(userId: number | string, options?: any): Bl
  * @returns {Bluebird<any[]>}
  */
 export function getUserReadingBooks(userId: number | string, options?: any): Bluebird<any[]> {
-  return getUserBooks( 'http://localhost:3000/user/' + userId + '/books/reading', options);
+  return getUserBooks(babelURL + '/user/' + userId + '/books/reading', options);
 }
 
 /**
@@ -114,7 +131,7 @@ function getUserBooks(from: string, options?: any): Bluebird<any[]> {
       for(let book of res.books) {
         promises.push(request({
           method: 'GET',
-          url: 'http://localhost:3002/book/' + book.isbn,
+          url: engineURL + '/book/' + book.isbn,
           json: true
         }))
       }

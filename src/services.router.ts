@@ -27,7 +27,7 @@ router.get('/test', (req: express.Request, res: express.Response) => {
 });
 
 /**
- * POST / login
+ * POST /login
  * user: {
  *    username: ID,
  *    password: string
@@ -65,6 +65,31 @@ router.post('/logout', (req: express.Request, res: express.Response) => {
       return res.header('Set-Cookie', resp.headers['set-cookie'][0]).status(200).json({
         authenticated: true
       });
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * POST /signup
+ * user : {
+ *    username: ID,
+ *    password: string,
+ *    lastName: string,
+ *    firstName: string
+ * }
+ *
+ * Registers an user, if he provides the right information.
+ * If so, it returns a 201 status code along with a small JSON object.
+ * Otherwise, it sends back a 400 status code.
+ */
+router.put('/signup', (req: express.Request, res: express.Response) => {
+  return services
+    .signup({user: req.body.user})
+    .then((resp: any) => {
+      return res.status(201).json(resp);
     })
     .catch((err: Error) => {
       console.log(err);

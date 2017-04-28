@@ -10,7 +10,7 @@ import * as service     from './services.router';
  * @param app The app to configure.
  */
 export function configureApp(app: express.Application): void {
-  const baseFolder = path.resolve(__dirname + '/../../dist/client');
+  const baseFolder = path.resolve(__dirname + '/../cover/dist');
 
   // Configure params
   app.set('port', process.env.BB_COVER_PORT || 3001);       // Process port
