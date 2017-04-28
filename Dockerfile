@@ -9,7 +9,7 @@ WORKDIR /usr/src/printer
 
 # Copy needed things
 COPY . /usr/src/printer
-COPY ./cover/dist /usr/src/printer/cover/dist
+COPY ./cover/dist/ /usr/src/printer/cover/dist
 
 # Expose port
 EXPOSE 3001
