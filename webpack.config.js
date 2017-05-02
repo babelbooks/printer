@@ -21,5 +21,9 @@ config.devServer = {
   },
   port: 3001
 };
-
+config.resolveLoader = {
+  modules: [
+    './cover/node_modules'
+  ]
+};
 module.exports = config;
