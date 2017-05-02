@@ -43,6 +43,15 @@ docker run babelbooks/printer
 ```
 
 ### POST /api/logout
+### PUT /api/signup
+```
+"user" : {
+    "username": ID,
+    "password": string,
+    "lastName": string,
+    "firstName": string
+}
+```
 ### GET /api/user/me
 ### PUT /api/user/me/book
 The given object must have the following shape:

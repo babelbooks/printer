@@ -73,7 +73,7 @@ router.post('/logout', (req: express.Request, res: express.Response) => {
 });
 
 /**
- * POST /signup
+ * PUT /signup
  * user : {
  *    username: ID,
  *    password: string,
