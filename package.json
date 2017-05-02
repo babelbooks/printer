@@ -7,7 +7,7 @@
   "scripts": {
     "postinstall": "cd cover && npm install && cd ..",
     "start": "npm run deploy && cross-env NODE_ENV=prod node dist/server.js",
-    "dev": "cd ./cover && npm install && cd .. cross-env NODE_ENV=hot-dev gulp build && cross-env NODE_ENV=hot-dev webpack-dev-server --open --hot",
+    "dev": "cross-env NODE_ENV=hot-dev gulp build && cross-env NODE_ENV=hot-dev webpack-dev-server --open --hot",
     "deploy": "cd ./cover && npm install && npm start && cd .. && cross-env NODE_ENV=prod gulp build",
     "docker": "cross-env NODE_ENV=prod gulp build && NODE_ENV=prod node dist/server.js"
   },
