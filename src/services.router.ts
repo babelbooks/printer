@@ -193,3 +193,53 @@ router.get('/user/:userId/books/borrowed', (req: express.Request, res: express.R
       return res.status(400).json(err);
     });
 });
+
+/**
+ * GET /user/me/appointments/for
+ *
+ * Returns an array of all appointments in which the current user has to pass a book,
+ * and delete outdated appointments., alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/me/appointments/for', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserAppointmentsFor({
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * GET /user/me/appointments/with
+ *
+ * Returns an array of all appointments in which the current user has to pass a book,
+ * and delete outdated appointments., alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/me/appointments/with', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserAppointmentsWith({
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});

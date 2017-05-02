@@ -112,6 +112,38 @@ export function getUserReadingBooks(userId: number | string, options?: any): Blu
 }
 
 /**
+ * Gathers all appointments in which the current user has to pass a book,
+ * and delete outdated appointments.
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
+ */
+export function getUserAppointmentsFor(options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird.resolve(request({
+    method: 'GET',
+    url: babelURL + '/appointment/user/me/for',
+    json: true,
+    headers: headers
+  }));
+}
+
+/**
+ * Gathers all appointments in which the current user has to retrieve a book,
+ * and delete outdated appointments.
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
+ */
+export function getUserAppointmentsWith(options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird.resolve(request({
+    method: 'GET',
+    url: babelURL + '/appointment/user/me/with',
+    json: true,
+    headers: headers
+  }));
+}
+
+/**
  * A wrapper to factorize some code.
  * @param from The url from which gather the books.
  * @param options Request's options.
