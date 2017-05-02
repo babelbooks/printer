@@ -1,4 +1,5 @@
 import * as express   from 'express';
+import * as Bluebird  from 'bluebird';
 import * as services  from './services';
 
 export let router = express.Router();
@@ -234,6 +235,49 @@ router.get('/user/me/appointments/with', (req: express.Request, res: express.Res
       headers: {
         cookie: req.headers['cookie']
       }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * PUT /user/me/appointments
+ * meeting: {
+ *    bookId: ID,
+ *    depositLocation: {
+ *        depositLocationType: string,
+ *        depositLocationAddress: string
+ *    }
+ * }
+ * OR
+ * meeting: {
+ *    bookId: ID,
+ *    depositLocation: {
+ *        depositLocationId: ID
+ *    }
+ * }
+ */
+router.put('/user/me/appointments', (req: express.Request, res: express.Response) => {
+  let options = {
+    headers: {
+      cookie: req.headers['cookie']
+    }
+  };
+  let meeting = req.body.meeting;
+  return services
+    .borrowBook(req.body.meeting.bookId, options)
+    .then((borrowId: number | string) => {
+      return services.getBorrow(borrowId, options);
+    })
+    .then((borrow: any) => {
+      meeting.borrow = borrow;
+      delete meeting.bookId;
+      return services.addAppointment({meeting: meeting}, options)
     })
     .then((resp: any) => {
       return res.status(200).json(resp);
