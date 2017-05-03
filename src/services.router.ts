@@ -1,4 +1,5 @@
 import * as express   from 'express';
+import * as Bluebird  from 'bluebird';
 import * as services  from './services';
 
 export let router = express.Router();
@@ -73,7 +74,7 @@ router.post('/logout', (req: express.Request, res: express.Response) => {
 });
 
 /**
- * POST /signup
+ * PUT /signup
  * user : {
  *    username: ID,
  *    password: string,
@@ -170,6 +171,31 @@ router.get('/user/:userId/books/reading', (req: express.Request, res: express.Re
 });
 
 /**
+ * GET /user/:userId/books/read
+ *
+ * Returns all information known about the books
+ * read by the given user, alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/:userId/books/read', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserReadBooks(req.params['userId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
  * GET /user/:userId/books/borrowed
  *
  * Returns all information known about the books
@@ -184,6 +210,99 @@ router.get('/user/:userId/books/borrowed', (req: express.Request, res: express.R
       headers: {
         cookie: req.headers['cookie']
       }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * GET /user/me/appointments/for
+ *
+ * Returns an array of all appointments in which the current user has to pass a book,
+ * and delete outdated appointments., alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/me/appointments/for', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserAppointmentsFor({
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * GET /user/me/appointments/with
+ *
+ * Returns an array of all appointments in which the current user has to pass a book,
+ * and delete outdated appointments., alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/me/appointments/with', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserAppointmentsWith({
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * PUT /user/me/appointments
+ * meeting: {
+ *    bookId: ID,
+ *    depositLocation: {
+ *        depositLocationType: string,
+ *        depositLocationAddress: string
+ *    }
+ * }
+ * OR
+ * meeting: {
+ *    bookId: ID,
+ *    depositLocation: {
+ *        depositLocationId: ID
+ *    }
+ * }
+ */
+router.put('/user/me/appointments', (req: express.Request, res: express.Response) => {
+  let options = {
+    headers: {
+      cookie: req.headers['cookie']
+    }
+  };
+  let meeting = req.body.meeting;
+  return services
+    .borrowBook(req.body.meeting.bookId, options)
+    .then((borrowId: number | string) => {
+      return services.getBorrow(borrowId, options);
+    })
+    .then((borrow: any) => {
+      meeting.borrow = borrow;
+      delete meeting.bookId;
+      return services.addAppointment({meeting: meeting}, options)
     })
     .then((resp: any) => {
       return res.status(200).json(resp);

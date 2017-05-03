@@ -79,6 +79,22 @@ export function getCurrentUser(options?: any): Bluebird<any> {
 }
 
 /**
+ * Gathers information about the queried borrow.
+ * @param borrowId The ID of the borrow to retrieve.
+ * @param options Request's options.
+ * @returns {Bluebird<any>}
+ */
+export function getBorrow(borrowId: number | string, options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird.resolve(request({
+    method: 'GET',
+    url: babelURL + '/book/borrow/' + borrowId,
+    json: true,
+    headers: headers
+  }));
+}
+
+/**
  * Gathers all information about the books originally owned
  * by the given user.
  * @param userId The user's Id from which retrieve the books.
@@ -109,6 +125,82 @@ export function getUserBorrowedBooks(userId: number | string, options?: any): Bl
  */
 export function getUserReadingBooks(userId: number | string, options?: any): Bluebird<any[]> {
   return getUserBooks(babelURL + '/user/' + userId + '/books/reading', options);
+}
+
+/**
+ * Gathers all information about the books read
+ * by the given user.
+ * @param userId The user's Id from which retrieve the books.
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
+ */
+export function getUserReadBooks(userId: number | string, options?: any): Bluebird<any[]> {
+  return getUserBooks(babelURL + '/user/' + userId + '/books/read', options);
+}
+
+/**
+ * Borrows the given book for the current user.
+ * @param bookId The book's ID.
+ * @param options Request's options.
+ * @returns {Bluebird<any>}
+ */
+export function borrowBook(bookId: number | string, options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird.resolve(request({
+    method: 'POST',
+    url: babelURL + '/user/me/borrow/' + bookId,
+    json: true,
+    headers: headers
+  }));
+}
+
+/**
+ * Adds the given appointment.
+ * @param meeting The meeting to add.
+ * @param options Request's options.
+ * @returns {Bluebird<any>}
+ */
+export function addAppointment(meeting: {meeting: any}, options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird.resolve(request({
+    method: 'PUT',
+    url: babelURL + '/appointment/meeting/add',
+    json: true,
+    headers: headers,
+    body: meeting
+  }));
+}
+
+/**
+ * Gathers all appointments in which the current user has to pass a book,
+ * and delete outdated appointments.
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
+ */
+export function getUserAppointmentsFor(options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird.resolve(request({
+    method: 'GET',
+    url: babelURL + '/appointment/user/me/for',
+    json: true,
+    headers: headers
+  }));
+}
+
+/**
+ * Gathers all appointments in which the current user has to retrieve a book,
+ * and delete outdated appointments.
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
+ */
+export function getUserAppointmentsWith(options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird.resolve(request({
+    method: 'GET',
+    url: babelURL + '/appointment/user/me/with',
+    json: true,
+    headers: headers
+  }));
 }
 
 /**
