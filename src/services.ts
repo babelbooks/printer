@@ -238,6 +238,8 @@ function getUserBooks(from: string, options?: any): Bluebird<any[]> {
     .then((res: any) => {
       let promises: any[] = [];
       for(let book of res.books) {
+        console.log("Inserting data bookId");
+        promises.push({bookId: book.bookId});
         promises.push(request({
           method: 'GET',
           url: engineURL + '/elastic/book/' + book.isbn,
