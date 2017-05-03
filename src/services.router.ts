@@ -432,3 +432,23 @@ router.get('/owners/:isbn', (req: express.Request, res: express.Response) => {
       return res.status(400).json(err);
     });
 });
+
+/**
+ * POST /book/read
+ *
+ * Set the given book to read.
+ * If the book doesn't exist, returns a 400 bad request status code along with an object
+ * describing the error.
+ */
+router.post('/book/read', (req: express.Request, res: express.Response) => {
+  return services
+    .setBookRead(req.body, {headers: {
+      cookie: req.headers['cookie']}
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      return res.status(400).json(err);
+    });
+});
