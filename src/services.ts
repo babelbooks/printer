@@ -247,3 +247,22 @@ function getUserBooks(from: string, options?: any): Bluebird<any[]> {
       return Bluebird.all(promises);
     });
 }
+
+/**
+ * Return a borrow if the given user has currently the given book in his possession.
+ * @param userId The user's Id.
+ * @param bookId The book's Id.
+ * @param options Request's options.
+ * @returns {Bluebird<any>}
+ */
+export function isBorrowedByUser(userId: number | string, bookId: number | string, options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird
+    .resolve(request({
+      method: 'GET',
+      url: babelURL + '/isborrowed/' + userId + '/' + bookId,
+      json: true,
+      headers: headers
+    }));
+}
+
