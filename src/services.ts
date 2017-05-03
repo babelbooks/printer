@@ -223,7 +223,7 @@ function getUserBooks(from: string, options?: any): Bluebird<any[]> {
       for(let book of res.books) {
         promises.push(request({
           method: 'GET',
-          url: engineURL + '/book/' + book.isbn,
+          url: engineURL + '/elastic/book/' + book.isbn,
           json: true
         }))
       }
@@ -248,6 +248,4 @@ export function isBorrowedByUser(userId: number | string, bookId: number | strin
       headers: headers
     }));
 }
-
-
 
