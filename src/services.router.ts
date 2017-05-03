@@ -194,6 +194,23 @@ router.get('/user/:userId/books/reading', (req: express.Request, res: express.Re
     });
 });
 
+
+router.get('/user/:userId/books/reading/raw', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserReadingBooksRaw(req.params['userId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
 /**
  * GET /user/:userId/books/read
  *
@@ -219,6 +236,22 @@ router.get('/user/:userId/books/read', (req: express.Request, res: express.Respo
     });
 });
 
+router.get('/user/:userId/books/read/raw', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserReadBooksRaw(req.params['userId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
 /**
  * GET /user/:userId/books/borrowed
  *
@@ -231,6 +264,22 @@ router.get('/user/:userId/books/read', (req: express.Request, res: express.Respo
 router.get('/user/:userId/books/borrowed', (req: express.Request, res: express.Response) => {
   return services
     .getUserBorrowedBooks(req.params['userId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+router.get('/user/:userId/books/borrowed/raw', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserBorrowedBooksRaw(req.params['userId'], {
       headers: {
         cookie: req.headers['cookie']
       }
