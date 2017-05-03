@@ -79,6 +79,23 @@ export function getCurrentUser(options?: any): Bluebird<any> {
 }
 
 /**
+ * Update the score of the curent user.
+ * @param n the score increment (or decrement if negatif)
+ * @param options Request's options.
+ * @returns {Bluebird<any>}
+ */
+export function updateCurrentUserScore(n: number, options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird.resolve(request({
+    method: 'POST',
+    url: babelURL + '/user/me/score',
+    json: true,
+    headers: headers,
+    body: n
+  }));
+}
+
+/**
  * Gathers information about the queried borrow.
  * @param borrowId The ID of the borrow to retrieve.
  * @param options Request's options.

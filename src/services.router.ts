@@ -121,6 +121,30 @@ router.get('/user/me', (req: express.Request, res: express.Response) => {
 });
 
 /**
+ * POST /user/me/score
+ * n: number
+ *
+ * Tries to increment the score of the current user by n.
+ * If the current user has a NULL score, nothing will happen (still successful).
+ * If successful, returns a 200 status code alongside the previous version
+ * of the current user (before update).
+ * Otherwise, returns a 400 bad request status code along with an object
+ * describing the error.
+ */
+router.post('/user/me/score', (req: express.Request, res: express.Response) => {
+  return services
+    .updateCurrentUserScore(req.body.n, {headers: {
+      cookie: req.headers['cookie']}
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      return res.status(400).json(err);
+    });
+});
+
+/**
  * GET /user/:userId/books
  *
  * Returns all information known about the books
