@@ -387,7 +387,7 @@ router.put('/user/me/book', (req: express.Request, res: express.Response) => {
 });
 
 /**
- * GET /isborrowed/:userId/:bookId
+ * PUT /isborrowed/:userId/:bookId
  *
  * Returns the borrow concerning the given user which currently has 
  * in his possession the given book.
@@ -396,7 +396,7 @@ router.put('/user/me/book', (req: express.Request, res: express.Response) => {
  */
 router.put('/book/add', (req: express.Request, res: express.Response) => {
   return services
-    .addBook(req.params['bookId'], {
+    .addBook(req.body.book, {
       headers: {
         cookie: req.headers['cookie']
       }

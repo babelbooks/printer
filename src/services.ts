@@ -266,13 +266,14 @@ export function isBorrowedByUser(userId: number | string, bookId: number | strin
     }));
 }
 
-export function addBook( bookId: number | string, options?: any): Bluebird<any> {
+export function addBook( book: {book: any}, options?: any): Bluebird<any> {
   let headers: any = options ? options.headers : undefined;
   return Bluebird
     .resolve(request({
       method: 'PUT',
-      url: babelURL + '/book/add/' + bookId,
+      url: babelURL + '/book/add/',
       json: true,
-      headers: headers
+      headers: headers,
+      body: book
     }));
 }
