@@ -32,6 +32,9 @@ docker run babelbooks/printer
 
 ## API
 ### POST /api/login
+
+Allows an user to log in, if he provides the right credentials.
+
 `Content-Type: application/json`
 ```
 {

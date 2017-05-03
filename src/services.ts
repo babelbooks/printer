@@ -281,6 +281,7 @@ export function addBook( book: {book: any}, options?: any): Bluebird<any> {
 export function getCurrentOwners( isbn: string, options?: any): Bluebird<any> {
   let headers: any = options ? options.headers : undefined;
   let ret : JSON;
+  console.log("Seeking owners with isbn: " + isbn);
   return Bluebird
     .resolve(request({
       method: 'GET',
@@ -291,10 +292,13 @@ export function getCurrentOwners( isbn: string, options?: any): Bluebird<any> {
     .then((response) => {
       let users = response.data;
       let i = 0;
+      console.log("first request ok, response: " + users.stringify());
+      
       promiseLoop( () => { 
         return i < users.length;
       },
       () => {
+          console.log("Asynchronous loop: " + i);
           let user = users[i].username;
           i++;
           return Bluebird
@@ -307,8 +311,18 @@ export function getCurrentOwners( isbn: string, options?: any): Bluebird<any> {
             .then((response2) => {
               ret += response2.body;
             })
+            .catch((err1: Error) => {
+              console.log("Error in seoond promise");
+              console.log(err1.message);
+            })
       });
       return ret;
+    })
+    .catch((err2: Error) => {
+      console.log(err2.message);
+      console.log("Error in first promise");
+      console.log(err2.message);
+      // TODO
     })
 }
 
