@@ -128,6 +128,17 @@ export function getUserReadingBooks(userId: number | string, options?: any): Blu
 }
 
 /**
+ * Gathers all information about the books read
+ * by the given user.
+ * @param userId The user's Id from which retrieve the books.
+ * @param options Request's options.
+ * @returns {Bluebird<any[]>}
+ */
+export function getUserReadBooks(userId: number | string, options?: any): Bluebird<any[]> {
+  return getUserBooks(babelURL + '/user/' + userId + '/books/read', options);
+}
+
+/**
  * Borrows the given book for the current user.
  * @param bookId The book's ID.
  * @param options Request's options.

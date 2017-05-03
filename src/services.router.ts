@@ -171,6 +171,31 @@ router.get('/user/:userId/books/reading', (req: express.Request, res: express.Re
 });
 
 /**
+ * GET /user/:userId/books/read
+ *
+ * Returns all information known about the books
+ * read by the given user, alongside a 200 status code
+ * if successful.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/user/:userId/books/read', (req: express.Request, res: express.Response) => {
+  return services
+    .getUserReadBooks(req.params['userId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
  * GET /user/:userId/books/borrowed
  *
  * Returns all information known about the books

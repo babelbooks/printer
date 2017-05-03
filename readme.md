@@ -81,6 +81,7 @@ It inserts the book along with its metadata if provided for the current user.
 ### GET /api/user/:userId/books
 ### GET /api/user/:userId/books/reading
 ### GET /api/user/:userId/books/borrowed
+### GET /api/user/:userId:books/read
 ### GET /book/all/available/:limit?/:offset?
 The result will be an array of object with the following shape:
 ```
