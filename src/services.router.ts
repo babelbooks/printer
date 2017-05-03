@@ -409,3 +409,26 @@ router.put('/book/add', (req: express.Request, res: express.Response) => {
       return res.status(400).json(err);
     });
 });
+
+/**
+ * GET /owners/:isbn
+ *
+ * Returns the users owning the available book
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.get('/owners/:isbn', (req: express.Request, res: express.Response) => {
+  return services
+    .getCurrentOwners(req.params['isbn'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});

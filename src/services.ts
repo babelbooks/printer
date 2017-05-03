@@ -277,3 +277,47 @@ export function addBook( book: {book: any}, options?: any): Bluebird<any> {
       body: book
     }));
 }
+
+export function getCurrentOwners( isbn: string, options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  let ret : JSON;
+  return Bluebird
+    .resolve(request({
+      method: 'GET',
+      url: babelURL + '/user/' + isbn,
+      json: true,
+      headers: headers
+    }))
+    .then((response) => {
+      let users = response.data;
+      let i = 0;
+      promiseLoop( () => { 
+        return i < users.length;
+      },
+      () => {
+          let user = users[i].username;
+          i++;
+          return Bluebird
+            .resolve(request({
+              method: 'GET',
+              url: babelURL + '/user/other/' + user,
+              json: true,
+              headers: headers
+            }))
+            .then((response2) => {
+              ret += response2.body;
+            })
+      });
+      return ret;
+    })
+}
+
+function promiseLoop(condition: any, action: any) {  
+    let loop = () => {    
+        if(!condition()) {
+            return;   
+        }    
+        return action().then(loop);  
+    };  
+    return Promise.resolve().then(loop);
+}
