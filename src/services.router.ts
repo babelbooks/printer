@@ -337,3 +337,51 @@ router.get('/isborrowed/:userId/:bookId', (req: express.Request, res: express.Re
       return res.status(400).json(err);
     });
 });
+
+/**
+ * GET /isborrowed/:userId/:bookId
+ *
+ * Returns the borrow concerning the given user which currently has 
+ * in his possession the given book.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.put('/user/me/book', (req: express.Request, res: express.Response) => {
+  return services
+    .isBorrowedByUser(req.params['userId'], req.params['bookId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});
+
+/**
+ * GET /isborrowed/:userId/:bookId
+ *
+ * Returns the borrow concerning the given user which currently has 
+ * in his possession the given book.
+ * Otherwise, returns a 400 status code along with a object
+ * describing the error.
+ */
+router.put('/book/add', (req: express.Request, res: express.Response) => {
+  return services
+    .addBook(req.params['bookId'], {
+      headers: {
+        cookie: req.headers['cookie']
+      }
+    })
+    .then((resp: any) => {
+      return res.status(200).json(resp);
+    })
+    .catch((err: Error) => {
+      console.log(err);
+      return res.status(400).json(err);
+    });
+});

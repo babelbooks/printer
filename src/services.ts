@@ -249,3 +249,13 @@ export function isBorrowedByUser(userId: number | string, bookId: number | strin
     }));
 }
 
+export function addBook( bookId: number | string, options?: any): Bluebird<any> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird
+    .resolve(request({
+      method: 'PUT',
+      url: babelURL + '/book/add/' + bookId,
+      json: true,
+      headers: headers
+    }));
+}
