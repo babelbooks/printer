@@ -20,6 +20,7 @@ export function test(): Bluebird<any> {
   ]);
 }
 
+//
 /**
  * Tries to login the given user from
  * the auth server.
@@ -314,13 +315,13 @@ export function getCurrentOwners( isbn: string, options?: any): Bluebird<any> {
 }
 
 
-function promiseLoop(condition: any, action: any) {  
-    let loop = () => {    
+function promiseLoop(condition: any, action: any) {
+    let loop = () => {
         if(!condition()) {
-            return;   
-        }    
-        return action().then(loop);  
-    };  
+            return;
+        }
+        return action().then(loop);
+    };
     return Promise.resolve().then(loop);
 }
 
