@@ -329,14 +329,13 @@ function promiseLoop(condition: any, action: any) {
  * @param book The book to set to read.
  * @returns {Bluebird<any>}
  */
-export function setBookRead( book: {book: any}, options?: any): Bluebird<any> {
+export function setBookRead( bookId: number | string, options?: any): Bluebird<any> {
   let headers: any = options ? options.headers : undefined;
   return Bluebird
     .resolve(request({
       method: 'POST',
-      url: babelURL + '/book/read',
+      url: babelURL + '/book/read/' + bookId,
       json: true,
-      headers: headers,
-      body: book
+      headers: headers
     }));
 }
