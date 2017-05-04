@@ -133,6 +133,10 @@ export function getUserBorrowedBooks(userId: number | string, options?: any): Bl
   return getUserBooks(babelURL + '/user/' + userId + '/books/borrowed', options);
 }
 
+export function getUserBorrowedBooksRaw(userId: number | string, options?: any): Bluebird<any[]> {
+  return getUserBooksRaw(babelURL + '/user/' + userId + '/books/borrowed', options);
+}
+
 /**
  * Gathers all information about the books currently read
  * by the given user.
@@ -144,6 +148,10 @@ export function getUserReadingBooks(userId: number | string, options?: any): Blu
   return getUserBooks(babelURL + '/user/' + userId + '/books/reading', options);
 }
 
+export function getUserReadingBooksRaw(userId: number | string, options?: any): Bluebird<any[]> {
+  return getUserBooksRaw(babelURL + '/user/' + userId + '/books/reading', options);
+}
+
 /**
  * Gathers all information about the books read
  * by the given user.
@@ -153,6 +161,10 @@ export function getUserReadingBooks(userId: number | string, options?: any): Blu
  */
 export function getUserReadBooks(userId: number | string, options?: any): Bluebird<any[]> {
   return getUserBooks(babelURL + '/user/' + userId + '/books/read', options);
+}
+
+export function getUserReadBooksRaw(userId: number | string, options?: any): Bluebird<any[]> {
+  return getUserBooksRaw(babelURL + '/user/' + userId + '/books/read', options);
 }
 
 /**
@@ -248,6 +260,17 @@ function getUserBooks(from: string, options?: any): Bluebird<any[]> {
     });
 }
 
+function getUserBooksRaw(from: string, options?: any): Bluebird<any[]> {
+  let headers: any = options ? options.headers : undefined;
+  return Bluebird
+    .resolve(request({
+      method: 'GET',
+      url: from,
+      json: true,
+      headers: headers
+    }));
+}
+
 /**
  * Return a borrow if the given user has currently the given book in his possession.
  * @param userId The user's Id.
@@ -280,36 +303,14 @@ export function addBook( book: {book: any}, options?: any): Bluebird<any> {
 
 export function getCurrentOwners( isbn: string, options?: any): Bluebird<any> {
   let headers: any = options ? options.headers : undefined;
-  let ret : JSON;
+  let ret : any;
   return Bluebird
     .resolve(request({
       method: 'GET',
       url: babelURL + '/user/' + isbn,
       json: true,
       headers: headers
-    }))
-    .then((response) => {
-      let users = response.data;
-      let i = 0;
-      promiseLoop( () => { 
-        return i < users.length;
-      },
-      () => {
-          let user = users[i].username;
-          i++;
-          return Bluebird
-            .resolve(request({
-              method: 'GET',
-              url: babelURL + '/user/other/' + user,
-              json: true,
-              headers: headers
-            }))
-            .then((response2) => {
-              ret += response2.body;
-            })
-      });
-      return ret;
-    })
+    }));
 }
 
 
@@ -328,14 +329,13 @@ function promiseLoop(condition: any, action: any) {
  * @param book The book to set to read.
  * @returns {Bluebird<any>}
  */
-export function setBookRead( book: {book: any}, options?: any): Bluebird<any> {
+export function setBookRead( bookId: number | string, options?: any): Bluebird<any> {
   let headers: any = options ? options.headers : undefined;
   return Bluebird
     .resolve(request({
       method: 'POST',
-      url: babelURL + '/book/read',
+      url: babelURL + '/book/read/' + bookId,
       json: true,
-      headers: headers,
-      body: book
+      headers: headers
     }));
 }
