@@ -274,7 +274,7 @@ export function addBook( book: {book: any}, options?: any): Bluebird<any> {
       url: babelURL + '/book/add/',
       json: true,
       headers: headers,
-      body: book
+      body: {"book":book}
     }));
 }
 
